@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ColorSwatch, Group } from "@mantine/core";
 import { SWATCH } from "../constant";
+import axios from "axios";
 
 function Home() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState("grey");
+  const [dictOfVars, setDictOfVars] = useState({});
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -63,10 +65,30 @@ function Home() {
     setIsDrawing(false);
   };
 
+  const sendData = async()=>{
+    const canvas = canvasRef.current
+    if(canvas){
+        const res = await axios({
+          method:'post',
+          url: `${process.env.VITE_API_URL}/calculator`,
+          data: {
+            image: canvas.toDataURL('image/png'),
+            dict_of_vars: dictOfVars,
+          }
+        })
+        const responce = await res.data  
+    }
+  }
+
   return (
     <>
-      <div className="flex grid grid-cols-12 ">
+      <div className="grid grid-cols-12 ">
         <div className="col-span-3 flex justify-end z-20">
+          <button onClick={sendData} className="text-white p-2 bg-gray-600 rounded font-bold text-xl">
+            calculate
+          </button>
+        </div>
+        <div className="col-span-1 flex justify-end z-20">
           <button onClick={reset} className="text-white p-2 bg-gray-600 rounded font-bold text-xl">
             reset
           </button>
