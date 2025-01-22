@@ -70,7 +70,7 @@ function Home() {
     if(canvas){
         const res = await axios({
           method:'post',
-          url: `${process.env.VITE_API_URL}/calculator`,
+          url: `http://localhost:8080/calculator`,
           data: {
             image: canvas.toDataURL('image/png'),
             dict_of_vars: dictOfVars,
